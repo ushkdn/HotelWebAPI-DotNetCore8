@@ -9,47 +9,36 @@ namespace HotelWebAPI_DotNetCore8.Controllers
     [Route("api/[controller]")]
     public class HotelController : ControllerBase
     {
-        private readonly DataContext _context;
-        public HotelController(DataContext context) {
-            _context = context;
+        public IHotelService _hotelService { get; }
+
+        public HotelController(IHotelService hotelService) {
+            _hotelService = hotelService;
         }
         [HttpPost]
-        public async Task<ActionResult<Hotel>> CreateOne(Hotel hotel)
+        public async Task<ActionResult<ServiceResponse<GetHotelDto>>> CreateOne(AddHotelDto newHotel)
         {
-            _context.Hotels.Add(hotel);
-            await _context.SaveChangesAsync();
-            return Ok(hotel);
-        }
-        
-        [HttpGet]
-        public async Task<ActionResult<List<Hotel>>> GetAll()
-        {
-            var hotels = await _context.Hotels.ToListAsync();
-            if(hotels is null) {
-                return NotFound($"Hotels not found");
-            }
-            return Ok(hotels);
-        }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Hotel>> GetOne(int id)
-        {
-            var hotel = await _context.Hotels.FindAsync(id);
-            if (hotel is null) {
-                return NotFound($"Hotel with Id {id} not found");
-            }
-            return Ok(hotel);
+            return Ok(await _hotelService.CreateOne(newHotel));
         }
         [HttpDelete]
-        public async Task<ActionResult<List<Hotel>>> DeleteOne(int id)
+        public async Task<ActionResult<ServiceResponse<GetHotelDto>>> DeleteOne(int id)
         {
-            var hotel=await _context.Hotels.FindAsync(id);
-            if (hotel is null) {
-                return NotFound($"Hotle with id: {id} not found.");
-            }
-            _context.Hotels.Remove(hotel);
-            await _context.SaveChangesAsync();
-            return Ok($"Hotel with id {id} deleted");   
-
+            return Ok(await _hotelService.DeleteOne(id));
         }
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<List<GetHotelDto>>>> GetAll()
+        {
+            return Ok(await _hotelService.GetAll());
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetHotelDto>>> GetOne(int id)
+        {
+            return Ok(await _hotelService.GetOne(id));
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetHotelDto>>> UpdateOne(int id, UpdateHotelDto updatedHotel)
+        {
+            return Ok(await _hotelService.UpdateOne(id, updatedHotel));
+        }
+
     }
 }

@@ -1,6 +1,28 @@
+@HotelWebAPI-DotNetCore8_HostAddress = https://localhost:7156
 @HotelWebAPI_DotNetCore8_HostAddress = http://localhost:5247
 
 GET {{HotelWebAPI_DotNetCore8_HostAddress}}/weatherforecast/
 Accept: application/json
+
+###
+
+GET {{HotelWebAPI-DotNetCore8_HostAddress}}/api/hotel
+
+###
+
+GET {{HotelWebAPI-DotNetCore8_HostAddress}}/api/hotel
+
+###
+
+POST {{HotelWebAPI-DotNetCore8_HostAddress}}/api/hotel
+Content-Type: application/json
+
+{
+  //AddHotelDto
+}
+
+###
+
+GET {{HotelWebAPI-DotNetCore8_HostAddress}}/api/hotel
 
 ###
